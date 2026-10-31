@@ -1,0 +1,25 @@
+# Audio and datasets are never committed
+data/*
+!data/.gitkeep
+*.wav
+*.mp3
+*.flac
+*.ogg
+*.aiff
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS / editors
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
