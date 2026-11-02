@@ -131,7 +131,7 @@ respected.
 ## 9. Roadmap
 
 - [x] Project scaffold and problem formulation
-- [ ] Sound as math: synthesis, DFT vs. FFT
+- [x] Sound as math: synthesis, DFT vs. FFT
 - [ ] Chords and tuning: ratios, equal temperament, dissonance curves
 - [ ] Chromagram and chord recognition
 - [ ] Key detection and Camelot distance
