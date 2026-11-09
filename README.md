@@ -132,7 +132,7 @@ respected.
 
 - [x] Project scaffold and problem formulation
 - [x] Sound as math: synthesis, DFT vs. FFT
-- [ ] Chords and tuning: ratios, equal temperament, dissonance curves
+- [x] Chords and tuning: ratios, equal temperament, dissonance curves
 - [ ] Chromagram and chord recognition
 - [ ] Key detection and Camelot distance
 - [ ] Onset detection and tempo estimation
@@ -159,6 +159,15 @@ respected.
    of audio," *IEEE Transactions on Speech and Audio Processing*, 7(3), 1999.
 9. R. Plomp and W. J. M. Levelt, "Tonal consonance and critical bandwidth,"
    *Journal of the Acoustical Society of America*, 38(4), 1965.
+10. J. W. Cooley and J. W. Tukey, "An algorithm for the machine calculation of
+    complex Fourier series," *Mathematics of Computation*, 19(90), 1965.
+11. W. A. Sethares, "Local consonance and the relationship between timbre and
+    scale," *Journal of the Acoustical Society of America*, 94(3), 1993.
+12. C. R. Harris et al., "Array programming with NumPy," *Nature*, 585, 2020.
+13. J. D. Hunter, "Matplotlib: A 2D graphics environment," *Computing in
+    Science & Engineering*, 9(3), 2007.
+14. B. McFee et al., "librosa: Audio and music signal analysis in Python,"
+    *Proceedings of the 14th Python in Science Conference*, 2015.
 
 ## License
 
