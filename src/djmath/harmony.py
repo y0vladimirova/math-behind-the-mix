@@ -7,8 +7,9 @@ consonant combinations of notes are:
 - interval sizes in cents; just intonation vs. 12-tone equal temperament
 - chord construction from stacked intervals
 - sensory dissonance (Plomp-Levelt curve, Sethares parametrisation)
+- chromagrams: folding a spectrogram into the 12 pitch classes
 
-Chromagrams and chord recognition are added in the next commit.
+Chord recognition is added in the next commit.
 """
 
 from fractions import Fraction
@@ -145,6 +146,47 @@ def dissonance_curve(
     return np.array(
         [chord_dissonance([fundamental, r * fundamental], n_harmonics) for r in ratios]
     )
+
+def pitch_class_of_bins(
+    frequencies: np.ndarray,
+    fmin: float = 55.0,
+    fmax: float = 5000.0,
+    a4: float = A4_FREQUENCY,
+) -> np.ndarray:
+    """Pitch class (0-11) of each frequency bin, or -1 outside [fmin, fmax].
+
+    Each bin is assigned to the nearest equal-tempered note, then folded
+    into one octave with modulo 12. Bins below fmin (including 0 Hz) or
+    above fmax are ignored: they contain little pitch information.
+    """
+    frequencies = np.asarray(frequencies, dtype=float)
+    classes = np.full(frequencies.shape, -1)
+    valid = (frequencies >= fmin) & (frequencies <= fmax)
+    midi = np.round(A4_MIDI + 12 * np.log2(frequencies[valid] / a4))
+    classes[valid] = midi.astype(int) % 12
+    return classes
+
+
+def chromagram(
+    frequencies: np.ndarray,
+    magnitudes: np.ndarray,
+    fmin: float = 55.0,
+    fmax: float = 5000.0,
+) -> np.ndarray:
+    """Fold a magnitude spectrogram into a 12 x n_frames chromagram.
+
+    The energy (squared magnitude) of all bins with the same pitch class is
+    summed, and each frame is normalised so that its largest entry is 1.
+    Silent frames stay all-zero.
+    """
+    classes = pitch_class_of_bins(frequencies, fmin, fmax)
+    energy = np.asarray(magnitudes) ** 2
+    chroma = np.zeros((12, energy.shape[1]))
+    for pc in range(12):
+        chroma[pc] = energy[classes == pc].sum(axis=0)
+
+    peak = chroma.max(axis=0)
+    return np.divide(chroma, peak, out=np.zeros_like(chroma), where=peak > 0)
 
 
 

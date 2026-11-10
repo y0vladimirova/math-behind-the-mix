@@ -121,3 +121,49 @@ def magnitude_spectrum(
     amplitudes = 2 * np.abs(spectrum) / n_samples
     return frequencies, amplitudes
 
+def hann_window(length: int) -> np.ndarray:
+    """Periodic Hann window: w[n] = 0.5 * (1 - cos(2 pi n / N)).
+
+    It tapers each frame smoothly to zero at its edges, which reduces
+    spectral leakage caused by cutting the signal into frames.
+    """
+    n = np.arange(length)
+    return 0.5 * (1 - np.cos(2 * np.pi * n / length))
+
+def stft(
+    x: np.ndarray,
+    frame_length: int = 4096,
+    hop_length: int = 1024,
+    sample_rate: int = SAMPLE_RATE,
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """Magnitude short-time Fourier transform.
+
+    The signal is cut into overlapping frames of `frame_length` samples,
+    starting every `hop_length` samples. Each frame is multiplied by a Hann
+    window and transformed with the FFT.
+
+    Returns
+    -------
+    frequencies : array of shape (frame_length // 2 + 1,)
+        Centre frequency of each bin in Hz.
+    times : array of shape (n_frames,)
+        Start time of each frame in seconds.
+    magnitudes : array of shape (frame_length // 2 + 1, n_frames)
+        |X| for every frequency bin (rows) and frame (columns).
+    """
+    x = np.asarray(x, dtype=float)
+    if len(x) < frame_length:
+        raise ValueError("The signal is shorter than one frame.")
+
+    n_frames = 1 + (len(x) - frame_length) // hop_length
+    window = hann_window(frame_length)
+    frames = np.stack(
+        [x[i * hop_length : i * hop_length + frame_length] * window for i in range(n_frames)],
+        axis=1,
+    )
+    magnitudes = np.abs(np.fft.rfft(frames, axis=0))
+    frequencies = np.fft.rfftfreq(frame_length, d=1 / sample_rate)
+    times = np.arange(n_frames) * hop_length / sample_rate
+    return frequencies, times, magnitudes
+
+
