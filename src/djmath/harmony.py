@@ -9,7 +9,8 @@ consonant combinations of notes are:
 - sensory dissonance (Plomp-Levelt curve, Sethares parametrisation)
 - chromagrams: folding a spectrogram into the 12 pitch classes
 
-Chord recognition is added in the next commit.
+- chromagrams: folding a spectrogram into the 12 pitch classes
+- chord recognition by template matching (cosine similarity)
 """
 
 from fractions import Fraction
@@ -187,6 +188,65 @@ def chromagram(
 
     peak = chroma.max(axis=0)
     return np.divide(chroma, peak, out=np.zeros_like(chroma), where=peak > 0)
+
+def chord_label(root: int, chord_type: str) -> str:
+    """Short chord name, e.g. (0, 'major') -> 'C', (9, 'minor') -> 'Am'."""
+    suffix = {"major": "", "minor": "m", "diminished": "dim", "augmented": "aug"}
+    return PITCH_CLASSES[root % 12] + suffix[chord_type]
+
+def chord_templates(
+    chord_types: tuple[str, ...] = ("major", "minor"),
+) -> tuple[list[str], np.ndarray]:
+    """Binary chroma templates for every chord type on all 12 roots.
+
+    Returns the chord labels and a matrix with one unit-length template
+    per row (shape: n_chords x 12).
+    """
+    labels, rows = [], []
+    for chord_type in chord_types:
+        for root in range(12):
+            template = np.zeros(12)
+            for offset in CHORD_TYPES[chord_type]:
+                template[(root + offset) % 12] = 1
+            labels.append(chord_label(root, chord_type))
+            rows.append(template / np.linalg.norm(template))
+    return labels, np.array(rows)
+
+
+def smooth_chroma(chroma: np.ndarray, width: int = 5) -> np.ndarray:
+    """Moving average of each pitch class over `width` frames.
+
+    Averaging neighbouring frames suppresses short noisy fluctuations.
+    The edges are padded with their own values so the length is unchanged.
+    """
+    if width < 1:
+        raise ValueError("width must be at least 1.")
+    kernel = np.ones(width) / width
+    left = (width - 1) // 2
+    padded = np.pad(chroma, ((0, 0), (left, width - 1 - left)), mode="edge")
+    return np.array([np.convolve(row, kernel, mode="valid") for row in padded])
+
+def recognize_chords(
+    chroma: np.ndarray,
+    chord_types: tuple[str, ...] = ("major", "minor"),
+) -> tuple[list[str], np.ndarray]:
+    """Best-matching chord for every frame of a chromagram.
+
+    The similarity between a frame c and a template t is the cosine of the
+    angle between them, (t . c) / (|t| |c|). Silent frames are labelled 'N'.
+
+    Returns the label of every frame and the similarity matrix
+    (n_chords x n_frames).
+    """
+    labels, templates = chord_templates(chord_types)
+    norms = np.linalg.norm(chroma, axis=0)
+    unit = np.divide(chroma, norms, out=np.zeros_like(chroma), where=norms > 0)
+    similarity = templates @ unit
+    best = np.argmax(similarity, axis=0)
+    frame_labels = [labels[i] if n > 0 else "N" for i, n in zip(best, norms)]
+    return frame_labels, similarity
+
+
 
 
 
