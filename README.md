@@ -133,8 +133,9 @@ respected.
 - [x] Project scaffold and problem formulation
 - [x] Sound as math: synthesis, DFT vs. FFT
 - [x] Chords and tuning: ratios, equal temperament, dissonance curves
-- [ ] Chromagram and chord recognition
-- [ ] Key detection and Camelot distance
+- [x] Chromagram and chord recognition
+- [x] Key detection and Camelot distance
+- [ ] Key detection on real recordings
 - [ ] Onset detection and tempo estimation
 - [ ] Evaluation against annotated datasets and librosa
 - [ ] Transitions: crossfades and time-stretching
