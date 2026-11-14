@@ -135,7 +135,7 @@ respected.
 - [x] Chords and tuning: ratios, equal temperament, dissonance curves
 - [x] Chromagram and chord recognition
 - [x] Key detection and Camelot distance
-- [ ] Key detection on real recordings
+- [x] Key detection on real recordings
 - [ ] Onset detection and tempo estimation
 - [ ] Evaluation against annotated datasets and librosa
 - [ ] Transitions: crossfades and time-stretching
@@ -144,31 +144,42 @@ respected.
 
 ## 10. References
 
-*(Expanded as the project progresses.)*
-
 1. M. Müller, *Fundamentals of Music Processing*, 2nd ed., Springer, 2021.
    Companion notebooks: FMP Notebooks, International Audio Laboratories Erlangen.
 2. D. Benson, *Music: A Mathematical Offering*, Cambridge University Press, 2006.
-3. W. Sethares, *Tuning, Timbre, Spectrum, Scale*, 2nd ed., Springer, 2005.
+3. W. A. Sethares, *Tuning, Timbre, Spectrum, Scale*, 2nd ed., Springer, 2005.
 4. J. O. Smith III, *Mathematics of the Discrete Fourier Transform (DFT)*, CCRMA, Stanford.
 5. C. L. Krumhansl, *Cognitive Foundations of Musical Pitch*, Oxford University Press, 1990.
 6. E. D. Scheirer, "Tempo and beat analysis of acoustic musical signals,"
    *Journal of the Acoustical Society of America*, 103(1), 1998.
 7. D. P. W. Ellis, "Beat tracking by dynamic programming,"
    *Journal of New Music Research*, 36(1), 2007.
-8. J. Laroche and M. Dolson, "Improved phase vocoder time-scale modification
-   of audio," *IEEE Transactions on Speech and Audio Processing*, 7(3), 1999.
+8. J. Laroche and M. Dolson, "Improved phase vocoder time-scale modification of audio,"
+   *IEEE Transactions on Speech and Audio Processing*, 7(3), 1999.
 9. R. Plomp and W. J. M. Levelt, "Tonal consonance and critical bandwidth,"
    *Journal of the Acoustical Society of America*, 38(4), 1965.
 10. J. W. Cooley and J. W. Tukey, "An algorithm for the machine calculation of
     complex Fourier series," *Mathematics of Computation*, 19(90), 1965.
-11. W. A. Sethares, "Local consonance and the relationship between timbre and
-    scale," *Journal of the Acoustical Society of America*, 94(3), 1993.
-12. C. R. Harris et al., "Array programming with NumPy," *Nature*, 585, 2020.
-13. J. D. Hunter, "Matplotlib: A 2D graphics environment," *Computing in
-    Science & Engineering*, 9(3), 2007.
-14. B. McFee et al., "librosa: Audio and music signal analysis in Python,"
-    *Proceedings of the 14th Python in Science Conference*, 2015.
+11. W. A. Sethares, "Local consonance and the relationship between timbre and scale,"
+    *Journal of the Acoustical Society of America*, 94(3), 1993.
+12. C. L. Krumhansl and E. J. Kessler, "Tracing the dynamic changes in perceived tonal
+    organization in a spatial representation of musical keys,"
+    *Psychological Review*, 89(4), 1982.
+13. P. Knees, Á. Faraldo, P. Herrera, R. Vogl, S. Böck, F. Hörschläger and M. Le Goff,
+    "Two data sets for tempo estimation and key detection in electronic dance music
+    annotated from user corrections," *Proceedings of the 16th International Society
+    for Music Information Retrieval Conference (ISMIR)*, 2015.
+14. Á. Faraldo, E. Gómez, S. Jordà and P. Herrera, "Key estimation in electronic dance
+    music," *Proceedings of the European Conference on Information Retrieval (ECIR)*, 2016.
+
+### Software
+
+15. C. R. Harris et al., "Array programming with NumPy," *Nature*, 585, 2020.
+16. P. Virtanen et al., "SciPy 1.0: Fundamental algorithms for scientific computing
+    in Python," *Nature Methods*, 17, 2020.
+17. J. D. Hunter, "Matplotlib: A 2D graphics environment,"
+    *Computing in Science & Engineering*, 9(3), 2007.
+18. B. McFee et al., "librosa: Audio and music signal analysis in Python,"
 
 ## License
 

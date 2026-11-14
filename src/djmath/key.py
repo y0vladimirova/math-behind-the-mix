@@ -144,3 +144,21 @@ def key_score(reference: str, estimate: str) -> float:
     if interval == 0:
         return 0.2
     return 0.0
+
+FLAT_TO_SHARP: dict[str, str] = {"Db": "C#", "Eb": "D#", "Gb": "F#", "Ab": "G#", "Bb": "A#"}
+"""Enharmonic spellings: datasets often write flats, this project uses sharps."""
+
+
+def normalize_key_label(text: str) -> str:
+    """Convert a key annotation to this project's format.
+
+    Examples: 'Eb minor' -> 'D# minor', ' C Major\\n' -> 'C major'.
+    Raises ValueError if the text is not a valid key.
+    """
+    parts = text.split()
+    if len(parts) != 2:
+        raise ValueError(f"Cannot parse key {text!r}.")
+    name, mode = parts
+    label = f"{FLAT_TO_SHARP.get(name, name)} {mode.lower()}"
+    parse_key(label)   # raises ValueError if the result is not a valid key
+    return label

@@ -7,11 +7,19 @@ implements the discrete Fourier transform (DFT) in two ways:
 - ``fft``: the recursive radix-2 Cooley-Tukey algorithm, O(N log N)
 
 Both are verified against ``numpy.fft.fft`` in the tests.
+content changes over time, ``stft`` computes a windowed spectrum per frame.
+``load_audio`` reads real recordings in the same format as the synthetic signals.
+
 """
 
+from math import gcd
+
 import numpy as np
+import soundfile as sf
+from scipy.signal import resample_poly
 
 from djmath.constants import SAMPLE_RATE
+
 
 def time_axis(duration: float, sample_rate: int = SAMPLE_RATE) -> np.ndarray:
     """Return the sample times t_n = n / sample_rate, in seconds.
@@ -165,5 +173,19 @@ def stft(
     frequencies = np.fft.rfftfreq(frame_length, d=1 / sample_rate)
     times = np.arange(n_frames) * hop_length / sample_rate
     return frequencies, times, magnitudes
+
+def load_audio(path, sample_rate: int = SAMPLE_RATE) -> np.ndarray:
+    """Read an audio file as a mono signal at `sample_rate`.
+
+    Stereo channels are averaged. If the file uses a different sample rate,
+    it is converted with polyphase resampling, which low-pass filters the
+    signal first so that frequencies above the new Nyquist limit do not alias.
+    """
+    data, file_rate = sf.read(path, dtype="float64", always_2d=True)
+    mono = data.mean(axis=1)
+    if file_rate != sample_rate:
+        common = gcd(file_rate, sample_rate)
+        mono = resample_poly(mono, sample_rate // common, file_rate // common)
+    return mono
 
 
