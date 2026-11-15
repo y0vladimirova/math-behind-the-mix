@@ -188,4 +188,52 @@ def load_audio(path, sample_rate: int = SAMPLE_RATE) -> np.ndarray:
         mono = resample_poly(mono, sample_rate // common, file_rate // common)
     return mono
 
+def kick_drum(duration: float = 0.25, sample_rate: int = SAMPLE_RATE) -> np.ndarray:
+    """Synthetic kick drum: a sine whose pitch falls from 150 Hz to 50 Hz.
+
+    The instantaneous frequency is f(t) = 50 + 100 exp(-t / 0.03) Hz, and the
+    phase is its integral, 2 pi (50 t + 3 (1 - exp(-t / 0.03))). The
+    amplitude decays exponentially with time constant 80 ms.
+    """
+    t = time_axis(duration, sample_rate)
+    phase = 2 * np.pi * (50 * t + 100 * 0.03 * (1 - np.exp(-t / 0.03)))
+    return np.sin(phase) * np.exp(-t / 0.08)
+
+def hihat(duration: float = 0.05, sample_rate: int = SAMPLE_RATE, rng=None) -> np.ndarray:
+    """Synthetic hi-hat: a short burst of white noise with a 10 ms decay."""
+    rng = np.random.default_rng(0) if rng is None else rng
+    t = time_axis(duration, sample_rate)
+    return 0.3 * rng.standard_normal(len(t)) * np.exp(-t / 0.01)
+
+def drum_loop(
+    bpm: float,
+    duration: float,
+    sample_rate: int = SAMPLE_RATE,
+    rng=None,
+) -> np.ndarray:
+    """A "four-on-the-floor" dance beat: a kick on every beat, a hi-hat between.
+
+    Parameters
+    ----------
+    bpm : float
+        Tempo in beats per minute; one beat lasts 60 / bpm seconds.
+    duration : float
+        Length of the loop in seconds.
+    """
+    rng = np.random.default_rng(0) if rng is None else rng
+    beat = 60 / bpm
+    signal = np.zeros(int(round(duration * sample_rate)))
+    kick, hat = kick_drum(sample_rate=sample_rate), hihat(sample_rate=sample_rate, rng=rng)
+
+    def place(sound, time):
+        start = int(round(time * sample_rate))
+        end = min(start + len(sound), len(signal))
+        if start < len(signal):
+            signal[start:end] += sound[: end - start]
+
+    for n in range(int(duration / beat) + 1):
+        place(kick, n * beat)
+        place(hat, (n + 0.5) * beat)
+    return signal
+
 

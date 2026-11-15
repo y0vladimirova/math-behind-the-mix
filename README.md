@@ -136,7 +136,8 @@ respected.
 - [x] Chromagram and chord recognition
 - [x] Key detection and Camelot distance
 - [x] Key detection on real recordings
-- [ ] Onset detection and tempo estimation
+- [x] Onset detection and tempo estimation
+- [ ] Tempo estimation on real recordings
 - [ ] Evaluation against annotated datasets and librosa
 - [ ] Transitions: crossfades and time-stretching
 - [ ] Set ordering: greedy vs. Held–Karp vs. heuristic
