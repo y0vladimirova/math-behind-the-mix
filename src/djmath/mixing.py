@@ -1,11 +1,11 @@
-"""Blending two tracks.
+"""Blending two tracks (planned for future work).
 
 Planned contents
 ----------------
+- beat alignment between two tracks, using the tempo estimates of djmath.tempo
 - linear vs. equal-power crossfade curves (cos/sin gains)
-- beat alignment between two tracks
-- time-stretching (resampling vs. phase vocoder) and its pitch trade-off
+- tempo adjustment by resampling or phase vocoder, and its pitch trade-off
 - rendering a transition between two tracks
 
-Implemented in a later commit.
+See Section 7.4 of the notebook.
 """

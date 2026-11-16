@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "djmath"
 version = "0.1.0"
-description = "The math behind DJing: tempo, key, harmony and set ordering from first principles."
+description = "The math behind DJing: key and tempo analysis from first principles, as first steps towards an auto-DJ."
 requires-python = ">=3.10"
 
 [tool.setuptools.packages.find]

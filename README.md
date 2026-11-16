@@ -1,5 +1,5 @@
 # The Math Behind the Mix
-### Building a mini auto-DJ from first principles
+### First steps towards an auto-DJ
 
 > Final exam project — Math Concepts for Developers (SoftUni)
 > Category: *Math applications in music* + *Algorithm implementation and analysis*
@@ -21,11 +21,11 @@ must answer:
 5. **How do we actually blend two tracks?** Their beats must be aligned and
    the volume handed over without a dip or spike in loudness.
 
-This project asks: **can these questions be answered from first principles,
-using only signal processing, linear algebra, group theory and graph
-algorithms?** Each step is implemented from scratch, explained mathematically,
-and evaluated against annotated data and against an established library
-(`librosa`) as a baseline.
+This project asks: **can the mathematics behind each step be derived and
+implemented from scratch, and how do the results compare with existing
+libraries and tools?** Each method is explained mathematically, verified
+with unit tests on synthetic signals with known answers, and evaluated on
+annotated real music against simple baselines and published results.
 
 Before tackling DJing, the project answers a more basic question that
 everything else depends on: **why do some combinations of frequencies (chords)
@@ -41,21 +41,21 @@ sound consonant, and how does Western tuning turn this into 12 notes?**
 | 4 | Detect the key of a track | Correlation with key profiles (Krumhansl–Schmuckler) |
 | 5 | Detect the tempo of a track | Onset detection (spectral flux), autocorrelation |
 | 6 | Measure harmonic compatibility | Circle of fifths / Camelot wheel as a cyclic group |
-| 7 | Blend two tracks smoothly | Equal-power crossfades, time-stretching |
-| 8 | Order tracks into a set | Shortest Hamiltonian path: greedy vs. Held–Karp DP vs. heuristics |
+| 7 | *(Future work)* Blend two tracks smoothly | Equal-power crossfades, time-stretching |
+| 8 | *(Future work)* Order tracks into a set | Shortest Hamiltonian path: greedy vs. Held–Karp DP |
 
 ## 3. Scope
 
 **In scope**
 - Electronic / dance music with a steady tempo (the main DJ use case).
 - Global (single) tempo and key per track.
-- Small sets (roughly 5–15 tracks) for exact ordering algorithms.
 
 **Out of scope**
 - Tempo changes within a track, key modulations, live performance effects.
 - Real-time processing.
 - Full beat-grid tracking across an entire track (only local alignment for a
   transition).
+- Mixing tracks and ordering a set (planned as future work, see the roadmap).
 
 ## 4. Assumptions
 
@@ -90,8 +90,9 @@ math-behind-the-mix/
 │   ├── harmony.py         # tuning, consonance, chroma
 │   ├── key.py             # key detection, Camelot distance
 │   ├── tempo.py           # onset detection, tempo estimation
-│   ├── mixing.py          # crossfades, time-stretching
-│   └── setlist.py         # track graph and ordering algorithms
+│   ├── datasets.py        # reading the downloaded datasets
+│   ├── mixing.py          # planned: crossfades, time-stretching
+│   └── setlist.py         # planned: track graph and ordering
 ├── tests/                 # unit tests (pytest)
 ├── scripts/
 │   └── download_data.py   # fetches datasets (audio is never committed)
@@ -130,18 +131,23 @@ respected.
 
 ## 9. Roadmap
 
+**Done**
 - [x] Project scaffold and problem formulation
 - [x] Sound as math: synthesis, DFT vs. FFT
 - [x] Chords and tuning: ratios, equal temperament, dissonance curves
-- [x] Chromagram and chord recognition
-- [x] Key detection and Camelot distance
+- [x] Chromagram
+- [x] Chord recognition
+- [x] Key detection (Krumhansl–Schmuckler)
+- [x] Harmonic distance (Camelot wheel)
 - [x] Key detection on real recordings
 - [x] Onset detection and tempo estimation
-- [ ] Tempo estimation on real recordings
-- [ ] Evaluation against annotated datasets and librosa
-- [ ] Transitions: crossfades and time-stretching
-- [ ] Set ordering: greedy vs. Held–Karp vs. heuristic
-- [ ] Results, conclusion, limitations, self-assessment
+- [x] Conclusion and future work
+
+**Future work**
+- [ ] Tempo estimation on real recordings (GiantSteps Tempo)
+- [ ] Key profiles for electronic dance music
+- [ ] Transitions: beat alignment and equal-power crossfades
+- [ ] Set ordering: greedy vs. Held–Karp
 
 ## 10. References
 
@@ -181,6 +187,16 @@ respected.
 17. J. D. Hunter, "Matplotlib: A 2D graphics environment,"
     *Computing in Science & Engineering*, 9(3), 2007.
 18. B. McFee et al., "librosa: Audio and music signal analysis in Python,"
+
+## Self-assessment
+
+**What went well:** I am proud to have found out that DJing, which I had always seen as a purely artistic skill, can be explained through mathematics. It made the project very interesting to work on.
+
+**What was difficult:** The project turned out to be more difficult than I expected. Some of the mathematics took time to understand, and the technical setup was a challenge at times, for example fixing a certificate error that blocked the dataset download.
+
+**What I learned:** How mathematics I knew from school, like logarithms and modular arithmetic, solves real problems in music, and how to build a project step by step with tests, real data and regular commits.
+
+**What I would do differently:** Because the project grew larger than planned, I had to cut its scope and leave mixing and set ordering for future work. Next time I would plan a smaller scope from the start and spend more time on each part.
 
 ## License
 
