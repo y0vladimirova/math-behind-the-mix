@@ -186,7 +186,6 @@ respected.
     in Python," *Nature Methods*, 17, 2020.
 17. J. D. Hunter, "Matplotlib: A 2D graphics environment,"
     *Computing in Science & Engineering*, 9(3), 2007.
-18. B. McFee et al., "librosa: Audio and music signal analysis in Python,"
 
 ## Self-assessment
 
